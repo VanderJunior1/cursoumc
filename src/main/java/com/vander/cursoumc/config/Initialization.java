@@ -73,7 +73,7 @@ public class Initialization implements CommandLineRunner {
 		cidadeRepo.saveAll(Arrays.asList(cidade,cidade2,cidade3));
 		
 		Cliente cli1 = new Cliente(null, "maria", "maria@hotmail.com", "cpf0999890", TipoCliente.PESSOAFISICA);
-		cli1.getTelefones().addAll(Arrays.asList("234234", "q234343"));
+		cli1.getTelefones().addAll(Arrays.asList("3232-3232", "9999-99999"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apt 303", "jardim", "38400000", cli1, cidade);
 		Endereco e2 = new Endereco(null, "Rua Cravos", "105", "Sala 3", "Centro", "38400000", cli1, cidade2);
