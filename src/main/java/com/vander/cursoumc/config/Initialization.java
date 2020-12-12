@@ -1,6 +1,7 @@
 package com.vander.cursoumc.config;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.vander.cursoumc.domain.Cidade;
 import com.vander.cursoumc.domain.Cliente;
 import com.vander.cursoumc.domain.Endereco;
 import com.vander.cursoumc.domain.Estado;
+import com.vander.cursoumc.domain.Pagamento;
+import com.vander.cursoumc.domain.PagamentoComBoleto;
+import com.vander.cursoumc.domain.PagamentoComCartao;
+import com.vander.cursoumc.domain.Pedido;
 import com.vander.cursoumc.domain.Produto;
+import com.vander.cursoumc.domain.enums.EstadoPagamento;
 import com.vander.cursoumc.domain.enums.TipoCliente;
 import com.vander.cursoumc.repositories.CategoriaRepository;
 import com.vander.cursoumc.repositories.CidadeRepository;
 import com.vander.cursoumc.repositories.ClienteRepository;
 import com.vander.cursoumc.repositories.EnderecoRepository;
 import com.vander.cursoumc.repositories.EstadoRepository;
+import com.vander.cursoumc.repositories.PagamentoRepository;
+import com.vander.cursoumc.repositories.PedidoRepository;
 import com.vander.cursoumc.repositories.ProdutoRepository;
 
 @Configuration
@@ -36,6 +44,10 @@ public class Initialization implements CommandLineRunner {
 	private ClienteRepository cliRepo;
 	@Autowired
 	private EnderecoRepository endRepo;
+	@Autowired
+	private PedidoRepository pedRepo;
+	@Autowired
+	private PagamentoRepository pgtoRepo;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -82,6 +94,19 @@ public class Initialization implements CommandLineRunner {
 		
 		cliRepo.saveAll(Arrays.asList(cli1));
 		endRepo.saveAll(Arrays.asList(e1,e2));
+		
+		Pedido ped1 = new Pedido(null, LocalDateTime.of(2017, 9, 30, 10, 32), cli1, e1);
+		Pedido ped2 = new Pedido(null, LocalDateTime.of(2017, 10, 10, 19, 35), cli1, e2);
+		
+		Pagamento pgto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pgto1);
+		Pagamento pgto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, LocalDateTime.of(2017, 9, 10, 0, 0), null);
+		ped2.setPagamento(pgto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		pedRepo.saveAll(Arrays.asList(ped1,ped2));
+		pgtoRepo.saveAll(Arrays.asList(pgto1,pgto2));
 	}
 
 }
