@@ -9,10 +9,15 @@ import org.springframework.context.annotation.Configuration;
 
 import com.vander.cursoumc.domain.Categoria;
 import com.vander.cursoumc.domain.Cidade;
+import com.vander.cursoumc.domain.Cliente;
+import com.vander.cursoumc.domain.Endereco;
 import com.vander.cursoumc.domain.Estado;
 import com.vander.cursoumc.domain.Produto;
+import com.vander.cursoumc.domain.enums.TipoCliente;
 import com.vander.cursoumc.repositories.CategoriaRepository;
 import com.vander.cursoumc.repositories.CidadeRepository;
+import com.vander.cursoumc.repositories.ClienteRepository;
+import com.vander.cursoumc.repositories.EnderecoRepository;
 import com.vander.cursoumc.repositories.EstadoRepository;
 import com.vander.cursoumc.repositories.ProdutoRepository;
 
@@ -27,6 +32,10 @@ public class Initialization implements CommandLineRunner {
 	private EstadoRepository estadoRepo;
 	@Autowired
 	private CidadeRepository cidadeRepo;
+	@Autowired
+	private ClienteRepository cliRepo;
+	@Autowired
+	private EnderecoRepository endRepo;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -62,6 +71,17 @@ public class Initialization implements CommandLineRunner {
 		
 		estadoRepo.saveAll(Arrays.asList(est1,est2));
 		cidadeRepo.saveAll(Arrays.asList(cidade,cidade2,cidade3));
+		
+		Cliente cli1 = new Cliente(null, "maria", "maria@hotmail.com", "cpf0999890", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("234234", "q234343"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apt 303", "jardim", "38400000", cli1, cidade);
+		Endereco e2 = new Endereco(null, "Rua Cravos", "105", "Sala 3", "Centro", "38400000", cli1, cidade2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
+		
+		cliRepo.saveAll(Arrays.asList(cli1));
+		endRepo.saveAll(Arrays.asList(e1,e2));
 	}
 
 }
