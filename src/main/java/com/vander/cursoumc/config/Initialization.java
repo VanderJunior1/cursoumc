@@ -13,6 +13,7 @@ import com.vander.cursoumc.domain.Cidade;
 import com.vander.cursoumc.domain.Cliente;
 import com.vander.cursoumc.domain.Endereco;
 import com.vander.cursoumc.domain.Estado;
+import com.vander.cursoumc.domain.ItemPedido;
 import com.vander.cursoumc.domain.Pagamento;
 import com.vander.cursoumc.domain.PagamentoComBoleto;
 import com.vander.cursoumc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.vander.cursoumc.repositories.CidadeRepository;
 import com.vander.cursoumc.repositories.ClienteRepository;
 import com.vander.cursoumc.repositories.EnderecoRepository;
 import com.vander.cursoumc.repositories.EstadoRepository;
+import com.vander.cursoumc.repositories.ItemPedidoRepository;
 import com.vander.cursoumc.repositories.PagamentoRepository;
 import com.vander.cursoumc.repositories.PedidoRepository;
 import com.vander.cursoumc.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class Initialization implements CommandLineRunner {
 	private PedidoRepository pedRepo;
 	@Autowired
 	private PagamentoRepository pgtoRepo;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepo;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -107,6 +111,20 @@ public class Initialization implements CommandLineRunner {
 		
 		pedRepo.saveAll(Arrays.asList(ped1,ped2));
 		pgtoRepo.saveAll(Arrays.asList(pgto1,pgto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, BigDecimal.ZERO, 1, BigDecimal.valueOf(2000.00));
+		ItemPedido ip2 = new ItemPedido(ped1, p3, BigDecimal.ZERO, 2, BigDecimal.valueOf(80.00));
+		ItemPedido ip3 = new ItemPedido(ped2, p2, BigDecimal.valueOf(100.00), 1, BigDecimal.valueOf(800.00));
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepo.saveAll(Arrays.asList(ip1,ip2,ip3));
+		
 	}
 
 }
