@@ -9,6 +9,11 @@ public class testeChuchu {
 //		soma.add(BigDecimal.valueOf(50);
 		
 		System.out.println(soma);
+		
+		
+		String correçao = "wellington";
+		
+		System.out.println(correçao);
 	}
 
 }
